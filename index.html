@@ -2,10 +2,9 @@
 
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="./style.css">  
-    <script src="./script.js"></script>
-    <!--<link rel="stylesheet" href="lib/style.css">  
-    <script src="lib/script.js"></script>-->
+    
+    <link rel="stylesheet" href="lib/style.css">  
+    <script src="lib/script.js"></script>
 
     <!--v 3.2: Scale webpage for any device-->
     <meta charset="utf-8">
@@ -17,13 +16,16 @@
   <body>
     <!--v 3.0 challenge: Add photo-->
     <img src="https://i.ibb.co/bQMwYhL/Walmart-2.png" alt="Walmart-2" border="0"></a>
-    <h1>Shopping List Version 4.0</h1>
-    
+    <h1>Shopping List</h1>
+
+    <!--Add ability to submit new item when [enter] key pressed-->
+    <label>Item</label><input type="text" id="item" name="item" onkeydown = "if (event.keyCode == 13)
+                        document.getElementById('btnSubmit').click()" maxlength="18" placeholder="enter item < 19 characters"/>
     <!--It should have a InputBox and Button to collect new SHOPPINGLISTS-->
     <!--It should have input fields for name & costs-->
-    Name: <input type="text" id="item" name="item"/><br><br>
-    Cost: &nbsp;&nbsp;<input type="text" id="cost" name="cost" />
-    <input class="button" name="submit" type="button" value="Add Item" onclick="addShoppinglist(item.value, cost.value)"/>
+   <!-- Name: <input type="text" id="item" name="item"/><br><br>-->
+    <!--Cost: &nbsp;&nbsp;<input type="text" id="cost" name="cost" />-->
+    <input class="button" id="btnSubmit" name="submit" type="button" value="Add Item" onclick="addShoppinglist(item.value)"/>
     <p id="MyList"></p>
     <p id="MyCart"></p>
   </body>

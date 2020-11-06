@@ -1,8 +1,8 @@
 /// Danny Walker
 // Spring 2020
 // Web233 Javascript
-// Date: 10/22/2020
-// Week 12, Shopping List Version 4.0
+// Date: 11/5/2020
+// Week 13, Shopping List Version to GitHub
 
 //It should have a place to store SHOPPINGLIST
 var shoppinglists = [];
@@ -95,7 +95,7 @@ function remove_unwanted(str)
 
 //It should add to Function SHOPPINGLISTS using object properties to Web Page Using DOM
 //v 3.0 Update function addShoppinglist by adding objects
-function addShoppinglist(item,cost)
+function addShoppinglist(item)
 {
   //v 3.0 declare variable for groc string
   var groc = "";
@@ -103,33 +103,34 @@ function addShoppinglist(item,cost)
   var count = 0;
   //v 3.0 Challenge: Verify a value is entered in name and cost before updating list
   if (item !== "") {
-    if (cost !== "") {
+    
       //v 3.0 edit value for MyItems.name
-      MyItems.name = item;
+      //MyItems.name = item;
       //v 3.0 edit value for MyItems.cost
-      MyItems.price = cost;
+      //MyItems.price = cost;
       //v 3.0 for loop through object propterties and
-      for (var x in MyItems) {
-        if (count === 1) {
-          groc += "$";
-        }
+      //for (var x in MyItems) {
+        //if (count === 1) {
+          //groc += "$";
+        //}
         //add to groc string from object array item
-        groc += MyItems[x];
-        if (count === 0) {
-          groc += " | ";
-        }
+        //groc += MyItems[x];
+        //if (count === 0) {
+          //groc += " | ";
+        //}
         //increment count by 1
-        count++;
-      }
+        //count++;
+      //}
       //push to shoppinglist
-      shoppinglists.push(groc);
+      //shoppinglists.push(groc);
+      shoppinglists.push(item);
       //display shoppinglist
       displayShoppinglists();
       //v 3.1: display shopping cart
       displayShoppingCart();
       //v 4.0 save cookie
       saveCookie();
-    }
+    
   }  
   //v 2.1: call function 'clearFocus'  
   clearFocus();
