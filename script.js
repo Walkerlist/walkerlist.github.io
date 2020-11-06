@@ -18,10 +18,13 @@ var MyItems = {
 
 //v 4.0 -- It should have ability to load & read cookie file function on Windows load
 //v 4.0 read cookie on load and display
+//Week 13: Add popup describing app when visitors load webpage the first time
 window.onload = function()
 {
+  alert("Welcome to 'Shopping List' App!\n\nCreated by Rock Valley College\n**Javascript(Web233) Students**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");
   populateShoppinglistOnLoad();
   displayShoppinglists();
+  clearFocus();
 }
 
 //v 4.0 -- It should have ability to create new cookie file from shoppinglist array
