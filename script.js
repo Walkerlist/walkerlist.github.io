@@ -192,7 +192,7 @@ function displayShoppingCart()
     arrays = "'" + arrays + "'";
     //v 3.2 -- Change add button to checkbox (add button commented out)    
     //var btnAddList = ' <input class = "button" name = "add" type = "button" value = "Add to Shopping List" onclick = "addBackToShoppinglist('+ arrays + ',' + i + ')"/>';
-    var btnAddList = '<label><input name = "add" type = "checkbox" id = "adds" value = "Add to Shopping List" onclick = "addBackToShoppinglist('+ arrays + ',' + i + ')" checked = "checked"/> Add </label>';
+    var btnAddList = '<label><input name = "add" type = "checkbox" id = "adds" value = "Add to Shopping List" onclick = "addBackToShoppinglist('+ arrays + ',' + i + ')" checked = "checked"/></label>';
     theRow = "<li>" + addtocart[i] + btnDelete + " " + " " + btnAddList + "<br></li>";
     theList += theRow;
     //From v 3.0 and 3.1, commented out
