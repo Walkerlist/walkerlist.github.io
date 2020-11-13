@@ -1,378 +1,303 @@
 /// Danny Walker
 // Spring 2020
 // Web233 Javascript
-// Date: 11/5/2020
-// Week 13, Shopping List Version to GitHub
+// Date: 11/12/2020
+// Week 14, Shopping List Version to GitHub
 
-//It should have a place to store SHOPPINGLIST
-var shoppinglists = [];
-//v 3.1 -- It should add new placeholder for shopping cart
-//v 3.1 addtocart empty tray
-var addtocart = [];
-//It should have an object properties for MyList for name and cost
-//v 3.0 Create Objects for Shoppinglist
+//v3.4 Add popup describing app when visitors load webpage the first time
+window.onload = function() {
+    alert("Welcome to 'Shopping List' App!\n\nCreated by Rock Valley College\n**Javascript(Web233) Students**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");
+    populateshoppinglistonload();
+    displayShoppinglists();
+    clearFocus();
+};
+
+//v 4.0 save / get array via cookies
+//v 4.0 read cookie on load and display
+
+//v4.1 get values via URL
+//Week 14: Add get(name)
+function get(name) {
+    var url = window.location.search;
+    var num = url.search(name);
+    var namel = name.length;
+    var frontlength = namel+num+1; //length of everything before the value
+    var front = url.substring(0, frontlength);
+    url = url.replace(front, "");
+    num = url.search("&");
+    if(num>=0) return url.substr(0,num);
+    if(num<0)  return url;
+}
+
+//Week 14: Add PassList & Share function to share shoppinglist array via URL pass by values
+function passlist() {
+  var url = "https://walkerlist.github.io/walkerlist14/index.html?list=" + shoppinglist;
+  //Week 14: Add link to sharelist id
+  document.getElementById("sharelist").innerHTML = 'Share List:\n' + url;
+  //Copy URL
+  copyToClipboard(url);
+}
+
+function share() {
+  passlist();
+}
+
+//Week 14: Add copyToClipboard function
+function copyToClipboard(text) {
+  var passbyurl = document.createElement("textarea");
+  passbyurl.value = text;
+  document.body.appendChild(passbyurl);
+  passbyurl.focus();
+  passbyurl.select();
+  document.execCommand("copy");
+  document.body.removeChild(passbyurl);
+  alert("URL is now on your clipboard.  Share with a friend: " + text);
+}
+
+function about() {
+    alert("Welcome to 'Shopping List' App!\n\nCreated by Rock Valley College\n**Javascript(Web233) Students**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");    
+}
+
+//read cookie and return
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+//v. 4.0remove and format cookie
+function remove_unwanted(str) {    
+  if ((str===null) || (str===''))  
+       return false;  
+ else  
+   str = str.toString();
+    //clean space
+   str = str.replace(/%20/g, " ");
+    //clean !
+    str = str.replace(/%21/g, "!");
+   str = str.replace(/%24/g, "$"); 
+   str = str.replace(/%7C/g, " | ");
+  return str.replace(/[^\x20-\x7E]/g, '');  
+}  
+
+//v 4.0 save cookie
+function savecookie() {
+  delete_cookie('walkerlist');
+   var date = new Date();
+   //keeps for a year
+    date.setTime(date.getTime() + Number(365) * 3600 * 1000);
+   document.cookie = 'walkerlist' + "=" + escape(shoppinglist.join(',')) + "; path=/;expires = " + date.toGMTString();
+}
+
+//v 4.0 delete cookie
+function delete_cookie(name) {
+  document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+//Week 14: Add populateshoppinglistonload
+function populateshoppinglistonload() {
+  shoppinglist = [];
+  addtocart = [];
+  //load cookie into array
+  var y = readCookie('walkerlist');
+  //remove unwanted chars and format
+  y = remove_unwanted(y); 
+  //spit array by comma %2C
+  
+   //v 4.1 get URL
+  var geturllistvalue = get("list");
+    if (geturllistvalue) {
+        geturllistvalue = remove_unwanted(geturllistvalue);
+      geturllistvalue = geturllistvalue.split(',');
+      shoppinglist = geturllistvalue;
+  }else if (y){
+       y = y.split('%2C');
+      shoppinglist = y;
+  }
+}
+
 var MyItems = {
   name:"",
   price:""
 };
 
-//v 4.0 -- It should have ability to load & read cookie file function on Windows load
-//v 4.0 read cookie on load and display
-//Week 13: Add popup describing app when visitors load webpage the first time
-window.onload = function()
-{
-  alert("Welcome to 'Shopping List' App!\n\nCreated by Rock Valley College\n**Javascript(Web233) Students**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");
-  populateShoppinglistOnLoad();
-  displayShoppinglists();
-  clearFocus();
-}
+var shoppinglist = [];
 
-//v 4.0 -- It should have ability to create new cookie file from shoppinglist array
-//v 4.0 -- It should have ability to save new cookie file after displayshoppinglist function (via a call to the saveCookie function whenever the display function is called)
-//v 4.0 save cookie
-function saveCookie()
-{
-  delete_cookie('walkerlist');
-  var date = new Date();
-  //keeps for a year
-  date.setTime(date.getTime() + Number(365) * 3600 * 1000);
-  document.cookie = 'walkerlist' + "=" + escape(shoppinglists.join(',')) + "; path = /; expires = " + date.toGMTString();
-}
+//v 3.1 addtocart empty array
+var addtocart = [];
 
-//v 4.0 -- It should have ability to read cookie file and update shoppinglist array
-//v 4.0 read cookie and return
-function readCookie(name)
-{
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for (var i = 0; i < ca.length; i++)
-  {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-  }
-  return null;
-}
-
-//v 4.0 -- It should have ability to delete cookie file
-//v 4.0 delete cookie
-function delete_cookie(name)
-{
-  document.cookie = name + '=; expires = Thu, 01 Jan 1970 00:00:01 GMT;';
-}
-
-//v 4.0 -- It should have ability to populate shoppinglist array from cookie file
-//v 4.0 populate shoppping list on load
-function populateShoppinglistOnLoad()
-{
-  shoppinglists = [];
-  addtocart = [];
-  //load cookie into array
-  var y = readCookie('walkerlist');
-  //remove unwanted chars and format
-  y = remove_unwanted(y);
-  //split array by comma %2C
-  y = y.split('%2C');
-  if (y)
-  {
-    shoppinglists = y;
-  }
-}
-
-//v 4.0 remove and format cookie
-function remove_unwanted(str)
-{
-  if ((str === null) || (str === ''))
-  {
-    return false;
-  }
-  else
-  {
-    str= str.toString();
-    str = str.replace(/%20/g, "");
-    str = str.replace(/%24/g, "$");
-    str = str.replace(/%7C/g, " | ");
-    return str.replace(/[^\x20-\x7E]/g, '');
-  }
-}
-
-//It should add to Function SHOPPINGLISTS using object properties to Web Page Using DOM
-//v 3.0 Update function addShoppinglist by adding objects
-function addShoppinglist(item)
-{
-  //v 3.0 declare variable for groc string
-  var groc = "";
-  //v 3.0 v 3.0 declare variable for loop count
-  var count = 0;
-  //v 3.0 Challenge: Verify a value is entered in name and cost before updating list
-  if (item !== "") {
-    
-      //v 3.0 edit value for MyItems.name
-      //MyItems.name = item;
-      //v 3.0 edit value for MyItems.cost
-      //MyItems.price = cost;
-      //v 3.0 for loop through object propterties and
-      //for (var x in MyItems) {
-        //if (count === 1) {
-          //groc += "$";
-        //}
-        //add to groc string from object array item
-        //groc += MyItems[x];
-        //if (count === 0) {
-          //groc += " | ";
-        //}
-        //increment count by 1
-        //count++;
-      //}
-      //push to shoppinglist
-      //shoppinglists.push(groc);
-      shoppinglists.push(item);
-      //display shoppinglist
-      displayShoppinglists();
-      //v 3.1: display shopping cart
-      displayShoppingCart();
-      //v 4.0 save cookie
-      saveCookie();
-    
-  }  
-  //v 2.1: call function 'clearFocus'  
-  clearFocus();
-}
-
-//v 3.1 (revised function) -- It should have ability to display shopping list
-//(v 3.0) It should have a FUNCTION to display a SHOPPINGLISTS to Web Page Using DOM
-//v 3.1: update function displayShoppinglists() to display shoppinglists & add 'remove', 'edit item', and 'add to cart' buttons
-function displayShoppinglists()
-{
-  //v 2.1: add and initialize variable 'TheList' with empty string
-  var theList = "";
-  //v 2.1: add and intitialize variable 'arrayLength' with shoppinglist.length
-  var arrayLength = shoppinglists.length;
-  //It should display remove button with logic to remove item (display handled here, in displayShoppinglists; logic passed to and handled in deleteShoppinglists)  
-  //v 2.1: declare a for loop
-  for (var i = 0; i < arrayLength; i++)
-  {
-    //v 3.0 add remove button using below i index (should go inside the 'for' loop to capture the correct 'i' value for position)
-    var btnDelete = ' <input class = "button" name = "delete" type = "button" value = "Remove Item" onclick = "deleteShoppinglists(' + i + ')"/>';
-    //v 3.1 add edit button using below i index
-    var btnUpdate = ' <input class = "button" name = "edit" type = "button" value = "Edit Item" onclick = "changeShoppinglist(' + i + ')"/>';
-    //v 3.1 add 'add to cart' button using below i index
-    var arrays = shoppinglists[i];
-    arrays = "'" + arrays + "'";
-    var btnAddCart = ' <input class = "button" name = "add" type = "button" value = "Add to Shopping Cart" onclick = "addToShopCart('+ arrays + ',' + i + ')"/>';
-    //From v 2.1 (now commented out): Concatentate TheList with each array item plus <br> tag
-    //theList = theList + shoppinglists[i] + '<br>';
-    //v 3.1 (revised) Concatenating the list plus adding 'remove', 'edit item', and 'add to cart' buttons to end of item
-    theList = theList +shoppinglists[i] + btnDelete + ' ' + btnUpdate + ' ' + btnAddCart + '<br>';
-  }
-  //v 3.1 (revised display): Display 'theList" to document ID 'MyList'
-  //v 3.1 challenge: Hide Shopping List when no items are displaying
-  if(shoppinglists.length !== 0)
-  {
-    document.getElementById("MyList").innerHTML = 'Shopping List ' + '<br>' + theList;
-  }
-  else
-  {
-    document.getElementById("MyList").innerHTML = '';
-  }
-}
-
-//v 3.2: Changes to displayShoppingCart function
-//v 3.1 -- It should have ability to display shopping cart
-function displayShoppingCart()
-{
-  var theList = "";
-  var theRow = "";
-  var arrayLength = addtocart.length;
-  for (var i = 0; i < arrayLength; i++)
-  {
-    //v 3.1add remove button using below i index
-    var btnDelete = ' <input class = "button" name = "delete" type = "button" value = "Remove Item" onclick = "deleteShoppingCart(' + i + ')"/>';
-    //v 3.2 -- Remove edit button
-    ////(commented out) v 3.1 add edit button using below i index
-    //var btnUpdate = ' <input class = "button" name = "edit" type = "button" value = "Edit Item" onclick = "changeShoppingCart(' + i + ')"/>';
-    //v 3.1 add 'add to shopping list' button using below i index
-    var arrays = addtocart[i];
-    arrays = "'" + arrays + "'";
-    //v 3.2 -- Change add button to checkbox (add button commented out)    
-    //var btnAddList = ' <input class = "button" name = "add" type = "button" value = "Add to Shopping List" onclick = "addBackToShoppinglist('+ arrays + ',' + i + ')"/>';
-    var btnAddList = '<label><input name = "add" type = "checkbox" id = "adds" value = "Add to Shopping List" onclick = "addBackToShoppinglist('+ arrays + ',' + i + ')" checked = "checked"/></label>';
-    theRow = "<li>" + addtocart[i] + btnDelete + " " + " " + btnAddList + "<br></li>";
-    theList += theRow;
-    //From v 3.0 and 3.1, commented out
-    ////Concatenating the list plus adding 'remove', 'edit item', and 'add to shopping list' buttons to end of item
-    //theList = theList +addtocart[i] + btnDelete + ' ' + btnUpdate + ' ' + btnAddList + '<br>';
-  }
-  //v 3.2 -- When checkbox checked and under "Shopping Cart" and unchecked above "Shopping Cart"
-  if(addtocart.length !== 0)
-  {
-    //Display 'theList" to document ID 'MyCart'
-    document.getElementById("MyCart").innerHTML = 'Shopping Cart ' + '<br><ul>' + theList + '</ul>';
-    ////(commented out) v 3.1 challenge: Hide Shopping Cart when no items are displaying
-    //document.getElementById("MyCart").innerHTML = 'Shopping Cart ' + '<br>' + theList;
-  }
-  else
-  {
-    document.getElementById("MyCart").innerHTML = '';
-  }
-}
-
-//v 3.1 (revised function) -- It should have ability to delete shopping list
-//(from v. 3.0) It should display remove button with logic to remove item (display handled in displayShoppinglists; logic passed to and handled here in deleteShoppinglists)
-function deleteShoppinglists(position)
-{
-  shoppinglists.splice(position, 1);
-  displayShoppinglists();
-  //Also display shopping cart
-  displayShoppingCart();
-  //v 4.0 save cookie
-  saveCookie();
-}
-//v 3.1 -- It should have ability to delete shopping cart
-function deleteShoppingCart(position)
-{
-  addtocart.splice(position, 1);
-  displayShoppinglists();
-  displayShoppingCart();
-  //v 4.0 save cookie
-  saveCookie();
-}
-
-//v 3.1 -- It should have ability to UPDATE ITEMS from shopping list
-function changeShoppinglist(position)
-{
-  //Not sure what assignment the below commented-out item came from, but adding for reference:
+//v3.1
+function changeShoppinglist(position) {
   //document.getElementById("MyList").innerHTML = shoppinglist[position];
-  var arrays = shoppinglists[position];
-  arrays = arrays.split (",");
-  var e1 = arrays[0];
-  var e2 = arrays[1];
-  var replacedAmount = e2.replace (/\$/g,'');
-  var eitem = prompt ("Please enter new item", e1);
-  var ecost = prompt ("Please enter new cost", replacedAmount);
-  shoppinglists[position] = eitem + "," + "$" + ecost;
+  var arrays = shoppinglist[position];
+  arrays = arrays.split(",");
+    var e1 = arrays[0];
+   var e2 = arrays[1];
+ var ReplacedAmount = e2.replace(/\$/g,'');
+  var eitem = prompt("Please enter new item", e1);
+  var ecost = prompt("Please enter your name", ReplacedAmount);
+  shoppinglist[position] = eitem + "," + '$' + ecost;
   displayShoppinglists();
   displayShoppingCart();
   //v 4.0 save cookie
-  saveCookie();
+  savecookie();
 }
-//v 3.1 -- It should have ability to UPDATE ITEMS from shopping cart
-function changeShoppingCart(position)
-{
-  //document.getElementById("My Cart").innerHTML = shoppinglists[position];
+
+//v3.1
+function changeShoppingCart(position) {
+  document.getElementById("MyCart").innerHTML = shoppinglist[position];
   var arrays = addtocart[position];
   arrays = arrays.split(",");
-  var e1 = arrays[0];
-  var e2 = arrays[1];
-  var replacedAmount = e2.replace(/\$/g,'');
+    var e1 = arrays[0];
+   var e2 = arrays[1];
+ var ReplacedAmount = e2.replace(/\$/g,'');
   var eitem = prompt("Please enter new item", e1);
-  var ecost = prompt("Please enter new cost", replacedAmount);
-  addtocart[position] = eitem + "," + "$" + ecost;
+  var ecost = prompt("Please enter your name", ReplacedAmount);
+  addtocart[position] = eitem + "," + '$' + ecost;
   displayShoppinglists();
   displayShoppingCart();
   //v 4.0 save cookie
-  saveCookie();
+   savecookie();
 }
 
-//v 3.1 -- It should have ability to move items from shopping cart to shopping list
-function addBackToShoppinglist(item,num)
-{
-  //push to deleteShoppinCart
-  deleteShoppingCart(num);
-  shoppinglists.push(item);
+//v3.1 
+function addbacktoshoppinglist(item,num) {
+  //push to deleteShoppingCar
+   deleteShoppingCart(num);
+  shoppinglist.push(item);
   //display shoppinglist
   displayShoppinglists();
-  //display shopping cart
-  displayShoppingCart();
-  //v 4.0 save cookie
-  saveCookie();
+//v3.1 display displayShoppingCart() 
+  displayShoppingCart(); 
   clearFocus();
+  //v 4.0 save cookie
+   savecookie();
 }
 
-//v 3.1 -- It should have ability to move items from shopping list to shopping cart
-function addToShopCart(item,num)
-{
-  //push to deleteShoppingLists
-  deleteShoppinglists(num);
-  addtocart.push(item);
+//v 3.1 Update function addShoppinglist by adding objects
+function addtoshopcart(item, num) {
+    document.getElementById("sharelist").innerHTML = ' ';
+    deleteShoppinglists(num);
+    addtocart.push(item);
   //display shoppinglist
   displayShoppinglists();
-  //display shopping cart
-  displayShoppingCart();
-  //v 4.0 save cookie
-  saveCookie();
+//v3.1 display displayShoppingCart() 
+  displayShoppingCart(); 
+  //Clear
   clearFocus();
+  //v 4.0 save cookie
+   savecookie();
 }
 
-//It should clear inputbox for Name and Cost
-//It should focus on inputbox on Name after text is cleared
-function clearFocus()
-{
-  //v 2.1: clear inputbox value out by id
-  //v 2.1: http://stackoverflow.com/questions/4135818/how-to-clear-a-textbox-using-javascript
+//v 3.1 Update function addShoppinglist by adding objects
+function addShoppinglist(item) {
+  //v 3.0 declare variable for groc string
+  //push to shoppinglist
+  if (item != "")
+  {
+  document.getElementById("sharelist").innerHTML = ' ';
+  shoppinglist.push(item);
+  //display shoppinglist
+  displayShoppinglists();
+//v3.1 display displayShoppingCart() 
+  displayShoppingCart(); 
+  clearFocus();
+  //v 4.0 save cookie
+  savecookie();
+  }else
+  {
+  alert("Item Description Required: Please enter now :)");
+  clearFocus();
+  }
+}
+
+function clearFocus() {
   document.getElementById("item").value = "";
-  //v 3.0 clear cost field
-  document.getElementById("cost").value = "";
-  //v 2.1: set focus on inputbox after text is cleared
-  //v 2.1: http://stackoverflow.com/questions/17500704/javascript-set-focus-to-html-form-element
+ //  document.getElementById("cost").value = "";
   document.getElementById("item").focus();
 }
 
-//Below is OLD SCRIPT from Shopping List 2.0, for reference.
-////It should have a place to store SHOPPINGLIST
-////Create a SHOPPINGLISTS array of three REAL grocery items (Milk, bread, etc)
-////var shoppinglists = ['item 1', 'item 2', 'item 3'];
+//v 3.1: update function displayShoppinglists() to add to cart 
+//Week 14: Update displayShoppinglists
+function displayShoppinglists() {
+  document.getElementById("MyList").innerHTML = '';
+  var TheList = "";
+  var TheRow = "";
+  var arrayLength = shoppinglist.length;
+  for (var i = 0; i < shoppinglist.length; i++) {
+    //v 3.1 change button name to btndelete
+    var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove" onclick="deleteShoppinglists(' + i + ')" />';
+    var btnupdate =  ' <input class="button" name="edit" type="button" value="Edit Item" onclick="changeShoppinglist(' + i + ')" />';
+    //v 3.1 add edit button using below i index & name it btnpdate
+    var arrays = shoppinglist[i];
+    arrays = "'"+arrays+"'";
+    var btnaddcart =  '<input name="add" type="checkbox" id="adds" value="Add to Shopping Cart" onclick="addtoshopcart('+arrays+','+ i +')" />';
+    //Week 14: Add share button
+    var btnsharelist = '<input class="button" id="shares" name="shares" type="submit" value="Share Shopping List" onclick="share()" />';
+    TheRow = '<li>' + shoppinglist[i] + btndelete + ' '  + btnaddcart + '</li>';
+    TheList += TheRow;
+  }
+//v3.1 add Title
+  if (arrayLength > 0) {
+    document.getElementById("MyList").innerHTML = '<ul>' + TheList + '</ul>';
+    //Week 14: Add share button if array list contains values
+    document.getElementById("sharebutton").innerHTML = btnsharelist;
+  }
+  else {
+    document.getElementById("MyList").innerHTML = ' ';
+    //Week 14: Remove share button and sharelist if arraylist contains values
+    document.getElementById("sharebutton").innerHTML = ' ';
+      document.getElementById("sharelist").innerHTML = ' ';
+  }
+}
 
-////Display shoppinglist
-//displayShoppinglists();
+//v3.1
+function displayShoppingCart() {
+  document.getElementById("MyCart").innerHTML = ''
+  var TheList = "";
+  var TheRow = "";
+  var arrayLength = addtocart.length;
+  for (var i = 0; i < arrayLength; i++) {
+    //v 3.1 change button name to btndelete
+    var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove" onclick="deleteShoppingCart(' + i + ')" />';
+    //v 3.1 add edit button using below i index & name it btnpdate
+    var btnupdate =  ' <input class="button" name="edit" type="button" value="Edit Item" onclick="changeShoppingCart(' + i + ')" />';
+    var arrays = addtocart[i];
+    arrays = "'"+arrays+"'";
+    //v 3.1 add edit button using below i index & name it btnpdate
+    var btnaddlist =  '<input name="add" type="checkbox" id="adds" value="Add to Shopping List" onclick="addbacktoshoppinglist('+arrays+',' + i + ')" checked="checked"/>';
+    TheRow =  "<li>" + addtocart[i] + btndelete + ' ' +  ' ' + btnaddlist + '</li>';
+    TheList += TheRow;
+  }
+  if (arrayLength > 0) {
+    document.getElementById("labels").innerHTML = 'Completed';
+    document.getElementById("MyCart").innerHTML = '<ul>' + TheList + '</ul>';
+  }
+  else {
+    document.getElementById("labels").innerHTML = '';
+    document.getElementById("MyCart").innerHTML = '';      
+  }
+}
 
-////Add new item and display (to the 'add' function without an argument)
-//addShoppinglist1();
-//displayShoppinglists();
+//v3.1
+function deleteShoppinglists(position) {
+  document.getElementById("sharelist").innerHTML = ' ';
+  shoppinglist.splice(position, 1);
+  displayShoppinglists();
+  displayShoppingCart();
+   //v 4.0 save cookie
+  savecookie();
+}
 
-////Add new item and display (to the 'add' function with an argument)
-//addShoppinglist2('add new item 5');
-
-////Change first item and display
-//changeShoppinglist(0, 'changed item 1');
-
-////Add new item and display, then change item and display, then delete same item and display
-//addShoppinglist2('add new item 6');
-//changeShoppinglist(5, 'changed item 6');
-//deleteShoppinglist(5);
-
-////FUNCTIONS
-
-////It should have a FUNCTION to display SHOPPINGLIST
-//function displayShoppinglists()
-//{
-  //document.write('<br>My Shopping List: ', shoppinglists);
-//}
-
-////It should have a FUNCTION to add new SHOPPINGLIST
-////Function that does not take an argument, but contains item in the function
-//function addShoppinglist1()
-//{
-  //shoppinglists.push('add new item 4');
-//}
-
-////Function that takes an item as an argument
-//function addShoppinglist2(listItem)
-//{
-  //shoppinglists.push(listItem);
-  //displayShoppinglists();
-//}
-
-////It should have a FUNCTION to change a SHOPPINGLIST
-//function changeShoppinglist(position, listItem)
-//{
-  //shoppinglists[position] = listItem;
-  //displayShoppinglists();
-//}
-
-////It should have a FUNCTION to delete a SHOPPINGLIST
-//function deleteShoppinglist (position)
-//{
-  //shoppinglists.splice(position, 1);
-  //displayShoppinglists();
-//}
+//v3.1
+function deleteShoppingCart(position) {
+  document.getElementById("sharelist").innerHTML = ' ';
+  addtocart.splice(position, 1);
+  displayShoppinglists();
+  displayShoppingCart();
+}

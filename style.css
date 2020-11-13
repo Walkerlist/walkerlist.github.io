@@ -1,25 +1,37 @@
-/*
-  Danny Walker
-  10/22/2020
-*/
-
-/*
-  DGW -- Here, I copied the entire CSS from the final example and played around with it a little.
-  - Commented out the piece that moves textboxes to the left
-  - Adjusted shopping cart colors to match image
-  - Attempted to adjust checkbox color to stand out (having difficulty targeting this in inspection or seeing what's overriding it)
-  - Experimented with cell padding and margins for shopping cart
-*/
-
 *:focus {
     outline: none;
 }
-body {
-    font: 14px/21px"Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+a:link {
+    color: white;
+}
+/* visited link */
+a:visited {
+    color: white;
 }
 
+/* mouse over link */
+a:hover {
+    color: hotpink;
+}
+
+/* selected link */
+a:active {
+    color: white;
+}
+body {
+    font: 14px/21px"Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    background-color: #349eeb;
+}
+#footer {
+    margin:2px; background:#0a0f9e; color:#ffdb17;text-align:center;font-size:x-small;
+    }
+label {
+     float:left;
+    padding-right: 15px;
+    text-indent: 5px;
+}
 #wrapper {
-    width:300px;
+    width:350px;
     margin:20px auto;
     padding:20px;
     border-radius: 5px 5px 0 0;
@@ -33,25 +45,42 @@ h1 {
     font-size: 24px;
     text-align:center;
 }
-
-/* Comment out the piece that moves textboxes to the left */
-/*input#item {
+input#item {
     float:left;
+    margin-bottom:5px;
+}
+input#remove {
+    float:right;
     margin-bottom:20px;
-}*/
-
-/* Attempting to adjust checkbox color to stand out */
+    margin-right:5px;
+    background-color: #0a0f9e;
+     color: #ffffff;
+     font-size:smaller;
+      width: 65px;
+}
+input#adds {
+    float:left;
+    margin-bottom:10px;
+    margin-right:5px;
+    margin-left:10px;
+     margin-top:5px;
+    background-color: #f44165;
+     color: #FFFFFF;
+      font-size:smaller;
+}
 input[type=checkbox] {
     vertical-align:middle;
-    margin: 0 5px;
-    color: #000000;
 }
-
-/* Still attempting to adjust checkbox color to stand out */
-input:checked ~ .checkmark:after {
-  background-color: #000000;
+input[type=button] {
+    vertical-align:middle;
+    float:right;
+    margin-bottom:10px;
+    margin-right:1,5;
+    margin-left:10px;
+    background-color: #0a0f9e;
+    color: #FFFFFF;
+    width: 60px;
 }
-
 ul {
     list-style-type:none;
     list-style-position:outside;
@@ -59,27 +88,19 @@ ul {
     padding:0px;
     clear:both;
 }
-
-/* Adjusted shopping cart background colors to match image */
-/* Experiment with cell padding and margins for shopping cart */
 li {
-    background: #0c6bf8;
+    background: #ccc;
     margin:5px 0px;
-    margin-right: 50px;
     line-height:1.6;
-    padding:20px;
+    padding:10px;
     border:#222 solid 1px;
 }
-
-/* Adjusted shopping cart background colors to match image */
 li:nth-child(odd) {
-    background: #f3dc0c;
+    background: #ccc;
 }
-
 li a {
     font-size:small;
 }
-
 form a {
     border-radius: 0.2em 0.2em 0.2em 0.2em;
     cursor: pointer;
@@ -99,7 +120,6 @@ form a {
     color: #FFFFFF;
     text-shadow: 0 -1px 0 #1D5837;
 }
-
 form a:hover {
     background-color: #71D09B;
     background-image: -moz-linear-gradient(center top, #71D09B, #2E8B57);
@@ -107,13 +127,15 @@ form a:hover {
     color: #FFFFFF;
     text-shadow: 0 -1px 0 #1D5837;
 }
-
+#labels {
+     margin:2px; background:#0a0f9e; color:#ffffff;text-align:center;font-size:small;
+}
+}
 form a:active {
     border-color: #1D5837;
     color: #FFFFFF;
     text-shadow: none;
 }
-
 form a.delete {
     background-color: #CD0000;
     background-image: -moz-linear-gradient(center top, #FF2323, #CD0000);
@@ -123,7 +145,6 @@ form a.delete {
     margin-top:0px;
     height:17px;
 }
-
 form a.delete:hover {
     background-color: #FF5656;
     background-image: -moz-linear-gradient(center top, #FF5656, #CD0000);
@@ -131,7 +152,6 @@ form a.delete:hover {
     color: #FFFFFF;
     text-shadow: 0 -1px 0 #890000;
 }
-
 form a.delete:active {
     border-color: #890000;
     color: #FFFFFF;
