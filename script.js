@@ -31,7 +31,7 @@ function get(name) {
 
 //Week 14: Add PassList & Share function to share shoppinglist array via URL pass by values
 function passlist() {
-  var url = "https://walkerlist.github.io/walkerlist14/index.html?list=" + shoppinglist;
+  var url = "https://walkerlist.github.io/index.html?list=" + shoppinglist;
   //Week 14: Add link to sharelist id
   document.getElementById("sharelist").innerHTML = 'Share List:\n' + url;
   //Copy URL
@@ -238,7 +238,7 @@ function displayShoppinglists() {
     arrays = "'"+arrays+"'";
     var btnaddcart =  '<input name="add" type="checkbox" id="adds" value="Add to Shopping Cart" onclick="addtoshopcart('+arrays+','+ i +')" />';
     //Week 14: Add share button
-    var btnsharelist = '<input class="button" id="shares" name="shares" type="submit" value="Share Shopping List" onclick="share()" />';
+    var btnsharelist = '<input class="button" id="shares" name="shares" type="submit" value="Share To-do List" onclick="share()" />';
     TheRow = '<li>' + shoppinglist[i] + btndelete + ' '  + btnaddcart + '</li>';
     TheList += TheRow;
   }
