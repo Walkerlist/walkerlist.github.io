@@ -32,10 +32,33 @@ function get(name) {
 //Week 14: Add PassList & Share function to share shoppinglist array via URL pass by values
 function passlist() {
   var url = "https://walkerlist.github.io/index.html?list=" + shoppinglist;
-  //Week 14: Add link to sharelist id
-  document.getElementById("sharelist").innerHTML = 'Share List:\n' + url;
+  //Week 15: It should have ability to create bit.ly link from url
+  var accessToken = "d7f1c2c0d17a5d50e8231b208de9f42d026b411f";
+  var params = {
+     "long_url" : url          
+  };
+  $.ajax({
+    url: "https://api-ssl.bitly.com/v4/shorten",
+    cache: false,
+    dataType: "json",
+    method: "POST",
+    contentType: "application/json",
+    beforeSend: function (xhr) {
+      xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+    },
+    data: JSON.stringify(params)
+  }).done(function(data) {
+	getshorturl = 1;
+	document.getElementById("sharelist").innerHTML = "The URL to share the list:\n" + data.link;
+	copyToClipboard(data.link);
+  }).fail(function(data) {
+	document.getElementById("sharelist").innerHTML = "The URL to share the list:\n" + url;
+	copyToClipboard(URL);
+  });
+  ////Week 14: Add link to sharelist id
+  //document.getElementById("sharelist").innerHTML = 'Share List:\n' + url;
   //Copy URL
-  copyToClipboard(url);
+  //copyToClipboard(url);
 }
 
 function share() {
@@ -43,6 +66,7 @@ function share() {
 }
 
 //Week 14: Add copyToClipboard function
+//Week 15: It should have ability to share url
 function copyToClipboard(text) {
   var passbyurl = document.createElement("textarea");
   passbyurl.value = text;
