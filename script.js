@@ -6,7 +6,7 @@
 
 //v3.4 Add popup describing app when visitors load webpage the first time
 window.onload = function() {
-    alert("Welcome to 'To-do List' App!\n\nCreated with Rock Valley College\n**Javascript(Web233) Students in Mr. Konkol's class.**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");
+    alert("Can you take care of a few things for me?\nYou're the best!");
     populateshoppinglistonload();
     displayShoppinglists();
     clearFocus();
