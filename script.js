@@ -6,7 +6,7 @@
 
 //v3.4 Add popup describing app when visitors load webpage the first time
 window.onload = function() {
-    alert("Can you take care of a few things for me?\nYou're the best!");
+    about();
     populateshoppinglistonload();
     displayShoppinglists();
     clearFocus();
@@ -79,7 +79,7 @@ function copyToClipboard(text) {
 }
 
 function about() {
-    alert("Welcome to 'Shopping List' App!\n\nCreated by Rock Valley College\n**Javascript(Web233) Students**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");    
+    alert("Can you take care of a few things for me?\nYou're the best!\n\nTo add follow up items, enter task in the textbox and click ‘+Add’ button.\n\nWhen task is completed, click the checkbox next to it.\n\nTo remove an item, click the ‘Remove’ button.");    
 }
 
 //read cookie and return
